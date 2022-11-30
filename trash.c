@@ -6,64 +6,63 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 17:42:03 by rrebois           #+#    #+#             */
-/*   Updated: 2022/11/29 12:41:46 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2022/11/30 15:22:34 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+
+
 char	*get_next_line(int fd)
 {
 	size_t			i;
 	size_t			j;
-//	static char	*temp;
+	int				ret;
+	static char	*temp;
 	char		*buf;
-	char	*str;
+	char		*str;
 
-	// if (!temp)
-	// 	temp = NULL;
 	buf = (char *)malloc(sizeof(*buf) * (BUF_SIZE + 1));
 	if (buf == NULL)
 		return (NULL);
-	if (read(fd, buf, BUF_SIZE) == -1)
-		return (NULL);
-	i = 0;
-	while (buf[i] != '\n')
-		i++;
-	// if (i < ft_strlen(buf))
-	// {
-	// 	str = (char *)malloc(sizeof(*str) * (i + 2));
-	// 	if (str == NULL)
-	// 		return (NULL);
-	// 	while (j <= i)
-	// 	{
-	// 		str[j] = buf[j];
-	// 		j++;
-	// 	}
-	// 	str[j] = '\0';
-	// 	// temp = (char *)malloc(sizeof(*str) * (ft_strlen(buf - i) + 1));
-	// 	// while (j < ft_strlen(buf))
-	// 	// {
-	// 	// 	temp[j] = buf[j];
-	// 	// 	j++;
-	// 	// }
-	// 	// temp[j] = '\0';
-	// }
-	if (buf[i] == '\n')
+	while (((ret = read(fd, buf, BUF_SIZE)) != 0) || temp[0] != '\0')
 	{
-		j = 0;
-		str = (char *)malloc(sizeof(*str) * (i + 2));
-		if (str == NULL)
+		if (temp == NULL)
+		temp = (char *)malloc(sizeof(*temp) * (ft_strlen(buf) + 1));
+		if (ret == -1 || temp == NULL)
 			return (NULL);
-		while (j <= i)
+		buf[ret] = '\0';
+
+		i = 0;
+		temp = ft_strjoin(temp, buf);
+//printf("temp join: %s\n", temp);
+		// if (temp == NULL)
+		// 	return (NULL);
+		while (temp[i] != '\0')
 		{
-			str[j] = buf[j];
-			j++;
+			j = 0;
+			if (temp[i] == '\n')
+			{
+				str = (char *)malloc(sizeof(*str) * (i + 1));
+				if (str == NULL)
+					return (NULL);
+				while (j <= i)
+				{
+					str[j] = temp[j];
+					j++;
+				}
+				str[j] = '\0';
+				temp = &temp[j];
+//printf("temp: %s\n", temp);
+				return (str);
+			}
+			i++;
 		}
-		str[j] = '\0';
-		return (str);
 	}
-	return (str);
+
+
+	return (NULL);
 }
 
 int	main()
@@ -73,9 +72,13 @@ int	main()
 	fd = open("test", O_RDONLY);
 	if (fd == -1)
 		return (1);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
+	printf("string: %s", get_next_line(fd));
+	printf("string: %s", get_next_line(fd));
+	printf("string: %s", get_next_line(fd));
+	printf("string: %s", get_next_line(fd));
+	printf("string: %s", get_next_line(fd));
+	printf("string: %s", get_next_line(fd));
+
 	if (close(fd) == -1)
 		return (1);
 	return (0);
