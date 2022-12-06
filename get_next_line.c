@@ -6,81 +6,72 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 17:42:03 by rrebois           #+#    #+#             */
-/*   Updated: 2022/11/30 17:15:29 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2022/12/06 17:24:48 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
-
-static char	*get_next_line_str(char *temp, char *str)
+#define BUFFER_SIZE 1
+static char	*ft_extract_line(char *temp, char *ptr)
 {
 	size_t	i;
-	size_t	j;
 
 	i = 0;
-	while (temp[i] != '\0')
-	{
-		j = 0;
-		if (temp[i] == '\n')
-		{
-			str = (char *)malloc(sizeof(*str) * (i + 1));
-			if (str == NULL)
-				return (NULL);
-			while (j <= i)
-			{
-				str[j] = temp[j];
-				j++;
-			}
-			str[j] = '\0';
-			return (str);
-		}
+	if (temp == NULL)
+		return (free(temp), NULL);
+	while (temp[i] != '\0' && temp[i] != '\n')
 		i++;
-	}
-	return (NULL);
+printf("%i\n", temp[i]);
+	return (ptr);
 }
 
-static int	get_next_line_check(char *temp)
-{
-	size_t	i;
+// static char	*ft_free(char *temp, char *buf)
+// {
+// 	char	*s;
 
-	i = 0;
-	while (temp[i] != '\0')
+// 	s = ft_strjoin(temp, buf);
+// 	free(temp);
+// 	return (s);
+// }
+
+static char	*ft_read_file(int fd, char *temp)
+{
+	char	buf[BUFFER_SIZE + 1];
+	int		ret;
+
+	if (temp == NULL)
 	{
-		if (temp[i] == '\n')
-			return (1);
-		i++;
+		temp = (char *)malloc(sizeof(*temp) * 1);
+		temp[0] = '\0';
 	}
-	return (0);
+	ret = 1;
+	while (ret > 0)
+	{
+		ret = read(fd, buf, BUFFER_SIZE);
+		if (ret == -1)
+			return (NULL);
+		buf[ret] = '\0';
+		temp = ft_strjoin(temp, buf);
+		if (temp == NULL)
+			return (NULL);
+	}
+	return (temp);
 }
 
 char	*get_next_line(int fd)
 {
-	int			ret;
 	static char	*temp;
-	char		*buf;
+	char		*ptr;
 
-	buf = (char *)malloc(sizeof(*buf) * (BUF_SIZE + 1));
-	if (buf == NULL)
+	ptr = NULL;
+	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	while ((ret = read(fd, buf, BUF_SIZE)) || temp[0] != '\0')
-	{
-		if (temp == NULL)
-			temp = (char *)malloc(sizeof(*temp) * (ft_strlen(buf) + 1));
-		if (ret == -1 || temp == NULL)
-			return (NULL);
-		buf[ret] = '\0';
-		temp = ft_strjoin(temp, buf);
-		if ((get_next_line_check(temp)) == 1)
-		{
-			buf = get_next_line_str(temp, buf);
-			temp = &temp[ft_strlen(buf)];
-			if (ret == 0 && temp[0] == '\0')
-				free(temp);
-			return (buf);
-		}
-	}
-	return (NULL);
+	temp = ft_read_file(fd, temp);
+	if (temp == NULL)
+		return (NULL);
+	ptr = ft_extract_line(temp, ptr);
+	return (ptr);
 }
 
 int	main()
@@ -94,12 +85,12 @@ int	main()
 	// get_next_line(fd);
 	// get_next_line(fd);
 	// get_next_line(fd);
-	printf("string: %s", get_next_line(fd));
-	printf("string: %s", get_next_line(fd));
-	// printf("string: %s", get_next_line(fd));
-	// printf("string: %s", get_next_line(fd));
-	// printf("string: %s", get_next_line(fd));
-	// printf("string: %s", get_next_line(fd));
+	printf("string: %s\n", get_next_line(fd));
+	printf("string: %s\n", get_next_line(fd));
+	// printf("string: %s\n", get_next_line(fd));
+	// printf("string: %s\n", get_next_line(fd));
+	// printf("string: %s\n", get_next_line(fd));
+	// printf("string: %s\n", get_next_line(fd));
 
 	if (close(fd) == -1)
 		return (1);

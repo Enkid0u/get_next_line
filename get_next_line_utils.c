@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 17:42:33 by rrebois           #+#    #+#             */
-/*   Updated: 2022/11/29 15:05:30 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2022/12/06 17:04:54 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
@@ -37,15 +37,15 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	while (s1[i] != '\0')
 	{
-		ptr[i] = ((char *)s1)[i];
+		ptr[i] = s1[i];
 		i++;
 	}
 	while (s2[j] != '\0')
 	{
-		ptr[i] = ((char *)s2)[j];
+		ptr[i] = s2[j];
 		i++;
 		j++;
 	}
 	ptr[i] = '\0';
-	return (ptr);
+	return (free(s1), ptr);
 }
