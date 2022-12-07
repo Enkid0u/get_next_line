@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: roro <roro@student.42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 17:42:33 by rrebois           #+#    #+#             */
-/*   Updated: 2022/12/06 17:04:54 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2022/12/07 14:00:59 by roro             ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
 	ptr = (char *)malloc(sizeof(*ptr) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (ptr == NULL)
+	if (ptr == NULL || s1 == NULL || s2 == NULL)
 		return (NULL);
 	while (s1[i] != '\0')
 	{
@@ -47,5 +45,5 @@ char	*ft_strjoin(char *s1, char *s2)
 		j++;
 	}
 	ptr[i] = '\0';
-	return (free(s1), ptr);
+	return (ptr);
 }
