@@ -6,12 +6,12 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 17:42:30 by rrebois           #+#    #+#             */
-/*   Updated: 2022/12/08 13:25:24 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2022/12/08 13:35:03 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <stdlib.h>
 # include <sys/types.h>
